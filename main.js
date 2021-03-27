@@ -1,6 +1,6 @@
 const container = window.document.getElementsByClassName('container')[0];
-const elements = [];
-let size = 256;
+let elements = [];
+let size;
 
 function initial(...args) {
   size = args[0];
@@ -87,9 +87,9 @@ async function swap(i, j) {
 
 async function bubbleSort() {
   for (let i = 0; i < elements.length - 1; i++) {
-    for (let j = i + 1; j < elements.length; j++) {
-      if (Number(elements[i].getAttribute('index')) > Number(elements[j].getAttribute('index'))) {
-        await swap(i, j);
+    for (let j = 0; j < elements.length - 1 - i; j++) {
+      if (Number(elements[j].getAttribute('index')) > Number(elements[j + 1].getAttribute('index'))) {
+        await swap(j, j + 1);
       }
     }
   }
@@ -137,6 +137,67 @@ async function selectionSort() {
   console.log('done');
 }
 
-initial(512);
+async function heapSort () {
+	async function max_heapify(start, end) {
+		//建立父節點指標和子節點指標
+		var dad = start;
+		var son = dad * 2 + 1;
+		if (son >= end)//若子節點指標超過範圍直接跳出函數
+			return;
+		if (son + 1 < end && Number(elements[son].getAttribute('index')) < Number(elements[son + 1].getAttribute('index')))//先比較兩個子節點大小，選擇最大的
+			son++;
+		if (Number(elements[dad].getAttribute('index')) <= Number(elements[son].getAttribute('index'))) {//如果父節點小於子節點時，交換父子內容再繼續子節點和孫節點比較
+			await swap(dad, son);
+			await max_heapify(son, end);
+		}
+	}
+
+	var len = elements.length;
+	//初始化，i從最後一個父節點開始調整
+	for (var i = Math.floor(len / 2) - 1; i >= 0; i--)
+		await max_heapify(i, len);
+	//先將第一個元素和已排好元素前一位做交換，再從新調整，直到排序完畢
+	for (var i = len - 1; i > 0; i--) {
+		await swap(0, i);
+		await max_heapify(0, i);
+  }
+  console.log('done');
+}
+
+async function mergeSort() {
+  async function merge(left, right, previous, next){
+    var result = [];
+    while(left.length > 0 && right.length > 0){
+      if(Number(left[0].getAttribute('index')) <= Number(right[0].getAttribute('index'))){
+        result.push(left.shift());
+      }else{
+        result.push(right.shift());
+      }
+      elements = [...previous, ...result, ...left, ...right, ...next];
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          draw();
+          resolve();
+        }, 0);
+      });
+    }
+    return result.concat(left, right);
+  }
+  async function mergeSortFunction(arr, startIndex){
+    if(arr.length <=1) {
+      return arr;
+    }
+    var middle = Math.floor(arr.length / 2);
+    var left = arr.slice(0, middle);
+    var right = arr.slice(middle);
+    const leftResult = await mergeSortFunction(left, startIndex);
+    const rightResult = await mergeSortFunction(right, startIndex + middle);
+    return await merge(leftResult, rightResult, elements.slice(0, startIndex), elements.slice(startIndex + arr.length));
+  }
+  await mergeSortFunction(elements, 0);
+  console.log('done');
+}
+
+initial(256);
 random();
 draw();

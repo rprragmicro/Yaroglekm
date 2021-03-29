@@ -198,6 +198,35 @@ async function mergeSort() {
   console.log('done');
 }
 
+async function lessBogoSort() {
+  let array = elements.slice(0);
+  let index = 0;
+  while (array.length) {
+    for (let i = 0; i < 16; i++) {
+      array.sort(() => Math.random() - 0.5);
+    }
+    elements = [...elements.slice(0, index), ...array];
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        draw();
+        resolve();
+      }, 0);
+    });
+    let sortedFlag = true;
+    for (let i = 1; i < array.length; i++) {
+      if (Number(array[i].getAttribute('index')) < Number(array[0].getAttribute('index'))) {
+        sortedFlag = false;
+        break;
+      }
+    }
+    if (sortedFlag) {
+      array = array.slice(1);
+      index++;
+    }
+  }
+  console.log('done');
+}
+
 initial(256);
 random();
 draw();

@@ -86,17 +86,20 @@ async function swap(i, j) {
 }
 
 async function bubbleSort() {
+  let drawCount = 0;
   for (let i = 0; i < elements.length - 1; i++) {
     for (let j = 0; j < elements.length - 1 - i; j++) {
       if (Number(elements[j].getAttribute('index')) > Number(elements[j + 1].getAttribute('index'))) {
         await swap(j, j + 1);
+        drawCount++;
       }
     }
   }
-  console.log('done');
+  console.log('bubbleSort done', 'drawCount = ' + drawCount);
 }
 
 async function quickSort() {
+  let drawCount = 0;
   async function partition(array, left, right, pivotIndex) {
     const pivotValue = Number(array[pivotIndex].getAttribute('index'));
     await swap(pivotIndex, right); // 把pivot移到結尾
@@ -104,10 +107,12 @@ async function quickSort() {
     for (let i = left; i < right; i++) {
       if (Number(array[i].getAttribute('index')) <= pivotValue) {
         await swap(storeIndex, i);
+        drawCount++;
         storeIndex++;
       }
     }
     await swap(right, storeIndex); // 把pivot移到它最後的地方
+    drawCount++;
     return storeIndex;
   }
   async function quicksortFunction(array, left, right) {
@@ -119,10 +124,11 @@ async function quickSort() {
     }
   }
   await quicksortFunction(elements, 0, elements.length - 1);
-  console.log('done');
+  console.log('quickSort done', 'drawCount = ' + drawCount);
 }
 
 async function selectionSort() {
+  let drawCount = 0;
   for (let i = 0; i < elements.length; i++) {
     let minIndex = i;
     for (let j = i + 1; j < elements.length; j++) {
@@ -132,12 +138,14 @@ async function selectionSort() {
     }
     if (i < minIndex) {
       await swap(i, minIndex);
+      drawCount++;
     }
   }
-  console.log('done');
+  console.log('selectionSort done', 'drawCount = ' + drawCount);
 }
 
 async function heapSort () {
+  let drawCount = 0;
 	async function max_heapify(start, end) {
 		//建立父節點指標和子節點指標
 		var dad = start;
@@ -148,6 +156,7 @@ async function heapSort () {
 			son++;
 		if (Number(elements[dad].getAttribute('index')) <= Number(elements[son].getAttribute('index'))) {//如果父節點小於子節點時，交換父子內容再繼續子節點和孫節點比較
 			await swap(dad, son);
+      drawCount++;
 			await max_heapify(son, end);
 		}
 	}
@@ -161,10 +170,11 @@ async function heapSort () {
 		await swap(0, i);
 		await max_heapify(0, i);
   }
-  console.log('done');
+  console.log('heapSort done', 'drawCount = ' + drawCount);
 }
 
 async function mergeSort() {
+  let drawCount = 0;
   async function merge(left, right, previous, next){
     var result = [];
     while(left.length > 0 && right.length > 0){
@@ -177,6 +187,7 @@ async function mergeSort() {
       await new Promise((resolve) => {
         setTimeout(() => {
           draw();
+          drawCount++;
           resolve();
         }, 0);
       });
@@ -195,10 +206,11 @@ async function mergeSort() {
     return await merge(leftResult, rightResult, elements.slice(0, startIndex), elements.slice(startIndex + arr.length));
   }
   await mergeSortFunction(elements, 0);
-  console.log('done');
+  console.log('mergeSort done', 'drawCount = ' + drawCount);
 }
 
 async function lessBogoSort() {
+  let drawCount = 0;
   let array = elements.slice(0);
   let index = 0;
   while (array.length) {
@@ -209,6 +221,7 @@ async function lessBogoSort() {
     await new Promise((resolve) => {
       setTimeout(() => {
         draw();
+        drawCount++;
         resolve();
       }, 0);
     });
@@ -224,9 +237,9 @@ async function lessBogoSort() {
       index++;
     }
   }
-  console.log('done');
+  console.log('lessBogoSort done', 'drawCount = ' + drawCount);
 }
 
-initial(256);
+initial(64);
 random();
 draw();

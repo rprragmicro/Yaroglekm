@@ -95,7 +95,7 @@ async function bubbleSort() {
       }
     }
   }
-  console.log('bubbleSort done', 'drawCount = ' + drawCount);
+  console.log('bubbleSort done\n\ndrawCount = ' + drawCount);
 }
 
 async function quickSort() {
@@ -124,7 +124,7 @@ async function quickSort() {
     }
   }
   await quicksortFunction(elements, 0, elements.length - 1);
-  console.log('quickSort done', 'drawCount = ' + drawCount);
+  console.log('quickSort done\n\ndrawCount = ' + drawCount);
 }
 
 async function selectionSort() {
@@ -141,7 +141,7 @@ async function selectionSort() {
       drawCount++;
     }
   }
-  console.log('selectionSort done', 'drawCount = ' + drawCount);
+  console.log('selectionSort done\n\ndrawCount = ' + drawCount);
 }
 
 async function heapSort () {
@@ -170,7 +170,7 @@ async function heapSort () {
 		await swap(0, i);
 		await max_heapify(0, i);
   }
-  console.log('heapSort done', 'drawCount = ' + drawCount);
+  console.log('heapSort done\ndrawCount = ' + drawCount);
 }
 
 async function mergeSort() {
@@ -206,7 +206,7 @@ async function mergeSort() {
     return await merge(leftResult, rightResult, elements.slice(0, startIndex), elements.slice(startIndex + arr.length));
   }
   await mergeSortFunction(elements, 0);
-  console.log('mergeSort done', 'drawCount = ' + drawCount);
+  console.log('mergeSort done\ndrawCount = ' + drawCount);
 }
 
 async function lessBogoSort() {
@@ -237,9 +237,9 @@ async function lessBogoSort() {
       index++;
     }
   }
-  console.log('lessBogoSort done', 'drawCount = ' + drawCount);
+  console.log('lessBogoSort done\ndrawCount = ' + drawCount);
 }
 
-initial(64);
+initial(2048);
 random();
 draw();
